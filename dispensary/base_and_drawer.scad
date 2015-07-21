@@ -7,14 +7,14 @@ $fn=50;
 
 pi=3.1415926535897932384626433832795;
 
-//module hollow_cylinder(r=10, h=1, w_thickness=.8) {
-//	difference() {
-//		union() {
-//			cylinder(r=r-0.2, h=h);
-//		} /* union */
-//		translate([0,0,-0.1])cylinder(r=r-w_thickness, h=h+0.2);
-//	} /* difference */
-//} /* hollow_cylinder */
+module hollow_cylinder(r=10, h=1, w_thickness=.8) {
+	difference() {
+		union() {
+			cylinder(r=r-0.2, h=h);
+		} /* union */
+		translate([0,0,-0.1])cylinder(r=r-w_thickness, h=h+0.2);
+	} /* difference */
+} /* hollow_cylinder */
 
 module dispenser_base() {
 	difference() {
@@ -27,8 +27,8 @@ module dispenser_base() {
 				translate([0,25,0]) hull() {
 					translate([90, -20, (pillar_height-16)/2-base_size.z/2]) 
 						rounded_cube_x2([e_shell_size.y+35, e_shell_size.y+0, pillar_height-16], radius=3, center=true);
-					translate([104.5, -15, (pillar_height)/2*3-3]) 
-						rounded_cube_x2([e_shell_size.y+6, e_shell_size.y-10, pillar_height], radius=3, center=true);
+					translate([104.5, 0, (pillar_height)/2*3+6]) 
+						rounded_cube_x2([e_shell_size.y+6, e_shell_size.y-40, pillar_height], radius=3, center=true);
 				} /* hull */
 			} /* translate */
 			/* Screw post for bottom of case. */
@@ -55,10 +55,10 @@ module dispenser_base() {
 		} /* union */
 		/* Spaces in objects */
 		/* Space for next layer */
-		translate([0,0,1.5*pillar_height]) rotate([0,0,45])
-			rounded_cube_x2([base_size.x*1.02, base_size.y*1.02, pillar_height+5], radius=base_radius, center=true);
-		/* Screw holes for next layer of case. */
-		translate([104,15,(e_shell_size.x/2*sin(45) + e_shell_size.z/2*sin(45) + 2)]) {
+		translate([0,0,1.5*pillar_height+5/2]) rotate([0,0,45])
+			rounded_cube_x2([base_size.x*1.02, base_size.y*1.02, pillar_height+5+5], radius=base_radius, center=true);
+		/* Space for electronics case */
+		translate([104,15,(e_shell_size.x/2*sin(45) + e_shell_size.z/2*sin(45) + 10)]) {
 			rotate([0,-45,90]) {
 					rounded_cube_x2(e_shell_size*1.02, radius=4, center=true);
 					translate([-15,0,-20]) {
@@ -73,6 +73,7 @@ module dispenser_base() {
 			} /* rotate */
 		} /* translate */
 
+		/* Screw holes for next layer of case. */
 		rotate([0,0,45]) {
 			translate([-(platform_size.x-platform_radius-5/2)/2,
 						-(platform_size.y-platform_radius-5/2)/2,-2])

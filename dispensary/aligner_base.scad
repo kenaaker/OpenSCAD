@@ -68,7 +68,7 @@ module exit_ramp_with_reflector_mount() {
 			translate([(pill_size*1.5+0)/2,(pill_size*1.5/2),0]) {
 				rotate([0,0,180]) reflected_light_sensor_mount_space();
 			} /* translate */
-		} /* translate */
+		} /* rotate */
 	} /* difference */
 } /* exit_ramp_with_sensor_mounts */
 
@@ -80,7 +80,7 @@ module gear_motor_mount_bottom(gm_mount_size = [15, 30, 30], motor_offset=-1) {
 				rounded_cube_x2(gm_mount_size, radius=2, center=true);
 		} /* union */
 		/* Remove the motor shape from the block */
-		translate([0,motor_offset,0+2.9])
+		translate([0,motor_offset,0+3.8])
 			scale([1.07,1.07,1.0]) gear_motor();
 		/* Remove a shaft clearance cylinder from the block */
 *		translate([0,motor_offset,gm_mount_size.z/2-5])
@@ -147,7 +147,7 @@ module aligner_base() {
 			rotate([0,0,180]) translate([0, 8, al_base_height-32/2]) rotate([90,0,0])
 				gear_motor_mount_bottom(gm_mount_size = [14, 30, 32]);
 *			rotate([0,0,180]) translate([0,-6.1,al_base_height-32/2]) rotate([-90,0,0])
-				gear_motor_mount_top(gm_mount_size = [14, 30, 30]);
+				gear_motor_mount_top(gm_mount_size = [14, 30, 32]);
 
 			rotate([0,0,180-90]) translate([0,55-14-0.1, al_base_height-32/2]) rotate([90,0,180])
 				gear_motor_mount_bottom(gm_mount_size = [14, 30, 32]);
@@ -178,7 +178,7 @@ module aligner_base() {
 			translate([0,0,45/2]) cylinder(r=1/2, h=45);
 		} /* union */
 		/* Hole through plate for pill exit */
-		translate([platform_size.x/2-8,-1,-2]) rotate([0,0,-90])  {
+		translate([platform_size.x/2-13.75,0,-2]) rotate([0,0,-90])  {
 			exit_ramp_space();
 		} /* translate */
 
@@ -265,59 +265,14 @@ module reflected_light_sensor_mount_space() {
 			reflected_light_sensor_module();
 } /* reflected_light_sensor_module */
 
-//module arena_drive_gear(print_orientation=false) {
-//	gear(circular_pitch=3, number_of_teeth=9, gear_thickness=8,
-//						hub_thickness=0, rim_thickness=8, bore_diameter=3.3, d_shaft_delta=.5);
-//} /* arena_drive_gear */
-//
-//module base_gear(print_orientation=false) {
-//	difference() {
-//		union() {
-//			bevel_gear_pair(gear1_teeth = 30, g1_thickness=3, gear2_teeth = 15, outside_circular_pitch=2,
-//				print_orientation=print_orientation);
-//			translate([0,0,base_size.z])
-//				cylinder(r=10/2, h=10);
-//		}
-//		union() {
-//			/* Drive shaft hole for aligner motion */
-//			translate([0,0,-0.1]) {
-//				cylinder(r=3*(2/sqrt(3))*1.04,h=13, $fn=6);
-//			} /* translate */
-//			/* set screw hole */
-//			translate([0,7,8]) rotate([90,0,0])
-//				cylinder(r=m3_for_thread/2,h=15);
-//		} /* union */
-//	} /* difference */
-//} /* base_gear */
-//
-//module arena_gear(print_orientation=false) {
-//	difference() {
-//		if (print_orientation == true) {
-//			translate([0,0,0]) rotate([0,0,180])
-//				bevel_gear_pair(print_orientation=print_orientation);
-//		} else {
-//			translate([0,0,0]) rotate([180,0,0])
-//				bevel_gear_pair(print_orientation=print_orientation);
-//		} /* endif */
-//		translate([0,0,0]) rotate([0,0,0])
-//			cylinder(r=5.2/2, h=20);
-//		/* Gear alignment holes */
-//		translate([(arena_drive_gear_diameter/2-2.5),0,0]) rotate([0,0,0])
-//			cylinder(r=2/2, h=45, $fn=20);
-//		translate([-(arena_drive_gear_diameter/2-2.5),0,0]) rotate([0,0,0])
-//			cylinder(r=2/2, h=45, $fn=20);
-//	} /* difference */
-//} /* arena_gear */
-
-
-//translate([0,0,base_size.z/2 + pillar_height]) {
-//translate([0,0,pillar_height]) {
-translate([0,0,base_size.z/2]) {
-	translate([platform_size.x/2-7,-1,base_size.z/2]) rotate([0,0,-90])  {
-			exit_ramp_with_reflector_mount();
+module full_aligner_base() {
+	translate([0,0,base_size.z/2]) {
+		translate([platform_size.x/2-13,0,base_size.z/2]) rotate([0,0,-90])  {
+				exit_ramp_with_reflector_mount();
+		} /* translate */
+		aligner_base();
 	}
-	aligner_base();
-}
+} /* full_aligner_base */
 
 *translate([-40,40,0]) rotate([0,0,0])
 	gear_motor_mount_bottom();
@@ -326,3 +281,5 @@ translate([0,0,base_size.z/2]) {
 	gear_motor_mount_top();
 *translate([0,0,0]) rotate([0,0,0])
 	gear_motor_mount_top();
+
+full_aligner_base();

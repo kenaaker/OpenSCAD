@@ -90,7 +90,7 @@ module aligner_arena(arena_size = 80) {
 			/* Stop to halt arena rotation */
 			rotate([0,0,330]) translate([platform_size.x/2-18,platform_size.y/2-18,0])
 				cylinder(r=4, h=wall_thickness);
-			translate([(platform_size.x/2-12)*cos(pill_exit_angle),
+*			translate([(platform_size.x/2-12)*cos(pill_exit_angle),
 						(platform_size.x/2-12)*sin(pill_exit_angle),0])
 				cylinder(r1=(pill_size+2)/2+wall_thickness, r2=(pill_size+4)/2+wall_thickness,
 							h=wall_height);
@@ -109,9 +109,9 @@ module aligner_arena(arena_size = 80) {
 		/* Drive shaft hole */
 		translate([0,0,-platform_size.z]) cylinder(r=m3_clearance/2, h=wall_height);
 		/* Pill exit hole */
-		translate([(platform_size.x/2-12)*cos(pill_exit_angle),
-					(platform_size.x/2-12)*sin(pill_exit_angle),-platform_size.z/2])
-			cylinder(r1=(pill_size+2)/2, r2=(pill_size+4)/2, h=wall_height+2);
+		rotate([0,0,pill_exit_angle])
+			translate([(platform_size.x/2-18), 0, platform_size.z/2-0.1])
+				cylinder(r1=(pill_size+2)/2, r2=(pill_size+10)/2, h=platform_size.z-0.49);
 	} /* difference */
 } /* aligner_arena */
 
@@ -133,12 +133,7 @@ module 	aligner_arena_bracket(arena_size = 80) {
 			rotate([0,0,270]) translate([((arena_size+16)/2),0,-wall_thickness*1.2])
 				cylinder(r=5*2, h=wall_thickness*5.2);
 		} /* union */
-		/* subtract out the aligner arena */
-*		translate([0,0,-0.1])
-				aligner_arena();
 		cylinder(r=40.5,h=10);
-		/* Get rid of the part where motion occurs. */
-		pie_slice(arena_size+11, 9, 111, 2);
 		/* Arena clamping ring */
 		translate([0,0,-wall_thickness*3.6]) cylinder(r=(arena_size+11)/2-0.1, h=wall_thickness*4);
 		/* Mounting boss with screw hole to clamp down arena. */
@@ -164,15 +159,13 @@ module 	aligner_arena_bracket(arena_size = 80) {
 
 *rotate([0,0,270]) translate([0,0,al_base_height+base_size.z+wall_thickness])
 	aligner_arena_bracket();
-*translate([-49,0, al_base_height+base_size.z/2])
-	arena_drive_gear();
 
-*translate([0,0,wall_thickness*4+1]) rotate([0,180,0])
+translate([0,95,wall_thickness*4+0.7]) rotate([0,180,90])
 	aligner_arena_bracket();
 
 *translate([0,0, al_base_height+platform_size.z/2+base_size.z/2]) // rotate([0,0,90-45/2])
 	render() aligner_arena();
 *translate([0,0, al_base_height+platform_size.z/2+base_size.z/2]) rotate([0,0,90-45/2])
 	render() aligner_arena();
-translate([0,0, -0.7]) rotate([0,0,0])
+translate([0,0,-0.7]) rotate([0,0,0])
 	aligner_arena();

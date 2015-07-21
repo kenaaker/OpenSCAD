@@ -38,13 +38,13 @@ module aligner_platform(platform_size = [100, 100, 1.4]) {
 		translate([-(platform_size.x-2)*cos(0)/2,-(platform_size.y-2)*sin(0)/2,-platform_size.z])
 			cylinder(r=12/2, h=wall_height);
 		/* Pill exit hole */
-		translate([(platform_size.x/2-12)*cos(pill_exit_angle),
-					(platform_size.x/2-12)*sin(pill_exit_angle),-platform_size.z/2])
-			cylinder(r1=(pill_size+2)/2, r2=(pill_size+4)/2, h=wall_height+2);
+		rotate([0,0,pill_exit_angle])
+			translate([(platform_size.x/2-18),0,-platform_size.z/2])
+				cylinder(r1=(pill_size+2)/2, r2=(pill_size+4)/2, h=wall_height+2);
 		/* Unload Pills exit hole */
-		translate([(platform_size.x/2-12)*cos(pill_exit_angle+90-45/2),
-					(platform_size.x/2-12)*sin(pill_exit_angle+90-45/2),-platform_size.z/2])
-			cylinder(r1=(pill_size+2)/2, r2=(pill_size+4)/2, h=wall_height+2);
+		rotate([0,0,pill_exit_angle+90-45/2])
+			translate([(platform_size.x/2-18), 0, -platform_size.z/2])
+				cylinder(r1=(pill_size+2)/2, r2=(pill_size+4)/2, h=wall_height+2);
 		/* Screw hole for bracket clamp. */
 		rotate([0,0,45]) translate([(platform_size.x-platform_radius-26/2)/2,
 					(platform_size.y-platform_radius-26/2)/2,1])
